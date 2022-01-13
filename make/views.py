@@ -38,7 +38,6 @@ headers = {'Authorization':'Bearer 5_crM9D0ZQEjTmJm6P_J9CjAgxU06AKt0ZB-xeAb'}
 def create_nft(request):
     if request.method == 'POST':
         layers = eval(request.POST.get('layers'))
-        group_name = request.POST.get('group_name')
         group_id = request.POST.get('group_id')
         name = request.POST.get('name')
         occupation = request.POST.get('occupation')
@@ -65,11 +64,11 @@ def create_nft(request):
                 png_name = layers[x]['name']
                 score += layers[x]['score']
                 composite_card[f'{element_name}_id'] = layers[x]['nft_id']
-                layer = Image.open(f'./files/{group_name}/{element_name}/{png_name}.png').convert('RGBA')
+                layer = Image.open(f'./files/{group_id}/{element_name}/{png_name}.png').convert('RGBA')
                 final = Image.alpha_composite(final, layer)
 
             # 图片存储
-            save_path = f'./img_result/{group_name}/{name}.png'
+            save_path = f'./img_result/{group_id}/{name}.png'
             final.save(save_path)
             files = {'file': open(save_path, 'rb')}
             response = requests.post(
