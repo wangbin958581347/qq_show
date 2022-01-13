@@ -8,6 +8,7 @@ from django.http import HttpResponse
 import requests
 import PIL.Image as Image
 import time
+import json
 
 import pymysql
 
@@ -39,7 +40,7 @@ headers = {'Authorization':'Bearer 5_crM9D0ZQEjTmJm6P_J9CjAgxU06AKt0ZB-xeAb'}
 def create_nft(request):
     try:
         if request.method == 'POST':
-            params = request.body.decode()
+            params = json.loads(request.body.decode())
             print(params)
             layers = params.get('layers')
             group_id = params.get('group_id')
