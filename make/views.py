@@ -62,12 +62,18 @@ def create_nft(request):
                     'original':original,
                     'sex':sex,
                                   }
+                element_dict = {
+                    'Background':'background_id',
+                    'Clothes': 'clothes_id',
+                    'Facial Expression': 'expression_id',
+                    'Head': 'head_id',
+                }
                 for x in range(lenth):
                     x = str(x)
                     element_name = layers[x]['property']
                     png_name = layers[x]['name']
                     score += layers[x]['score']
-                    composite_card[f'{element_name}_id'] = layers[x]['nft_id']
+                    composite_card[element_dict[element_name]] = layers[x]['nft_id']
                     layer = Image.open(f'./files/{group_id}/{element_name}/{png_name}.png').convert('RGBA')
                     final = Image.alpha_composite(final, layer)
 
