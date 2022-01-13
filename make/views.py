@@ -39,6 +39,7 @@ headers = {'Authorization':'Bearer 5_crM9D0ZQEjTmJm6P_J9CjAgxU06AKt0ZB-xeAb'}
 def create_nft(request):
     try:
         if request.method == 'POST':
+            print(request.POST.get('layers'))
             layers = eval(request.POST.get('layers'))
             group_id = request.POST.get('group_id')
             name = request.POST.get('name')
