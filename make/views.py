@@ -128,18 +128,18 @@ def create_nft(request):
                 values({value_str[:-1]})
                 """
                 insert_and_get_id(sql)
-                result = {'status': 'success', 'message': '上传成功','url':image_link}
+                result = {"status": "success", "message": "上传成功","url":image_link}
                 return HttpResponse(str(result))
             else:
-                result = {'status': 'faild', 'message': '图层数据为空','url':''}
+                result = {"status": "faild", "message": "图层数据为空","url":""}
                 return HttpResponse(str(result))
 
         else:
-            result = {'status':'faild','message':'方法错误（POST）','url':''}
+            result = {"status":"faild","message":"方法错误（POST）","url":""}
             return HttpResponse(str(result))
     except:
         print(traceback.format_exc())
-        result = {'status': 'faild', 'message': 'error','url':''}
+        result = {"status": "faild", "message": "error","url":""}
         return HttpResponse(str(result))
 
 
