@@ -20,11 +20,11 @@ def insert_and_get_id(sql):
     :return: {"1": 1, "2": 2, "3": 3}
     """
     db = pymysql.connect(
-        host='101.201.46.114',
+        host='sandbox-starcoin.cluster-ct4tlgfmee0j.ap-southeast-1.rds.amazonaws.com',
         port=3306,
-        user="crypto_rw",
-        password="crypto_rw_password",
-        database="ido_server_bak"
+        user="admin",
+        password="OdeWzZNalcTPk2LAo0Lg",
+        database="ido_server"
     )
     cursor = db.cursor()
     cursor.execute(sql)
@@ -132,6 +132,8 @@ def create_nft(request):
             return HttpResponse(str(result))
     except:
         print(traceback.format_exc())
+        result = {'status': 'faild', 'message': 'error'}
+        return HttpResponse(str(result))
 
 
 
