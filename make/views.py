@@ -40,6 +40,7 @@ def create_nft(request):
     try:
         if request.method == 'POST':
             print(request.POST)
+            print(request.body)
             print(request.POST.get('layers'))
             layers = eval(request.POST.get('layers'))
             group_id = request.POST.get('group_id')
