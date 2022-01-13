@@ -37,11 +37,9 @@ def insert_and_get_id(sql):
 
 headers = {'Authorization':'Bearer 5_crM9D0ZQEjTmJm6P_J9CjAgxU06AKt0ZB-xeAb'}
 def create_nft(request):
-    print(request.method)
     try:
         if request.method == 'POST':
             layers = eval(request.POST.get('layers'))
-            print(layers)
             group_id = request.POST.get('group_id')
             name = request.POST.get('name')
             occupation = request.POST.get('occupation')
