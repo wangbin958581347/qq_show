@@ -88,21 +88,21 @@ def create_nft(request):
                     headers=headers
                 )
                 image_link = response.json()['result']['variants'][0]
-                info_value = {
-                    'nft_id': 0,
-                    'group_id': group_id,
-                    'type': '',
-                    'name': name,
-                    'owner': '',
-                    'image_link': image_link,
-                    'image_data': '',
-                    'score': score,
-                    'rank': 0,
-                    'created': 0,
-                    'state': 0,
-                    'create_time': int(time.time() * 1000),
-                    'update_time': int(time.time() * 1000)
-                }
+                # info_value = {
+                #     'nft_id': 0,
+                #     'group_id': group_id,
+                #     'type': '',
+                #     'name': name,
+                #     'owner': '',
+                #     'image_link': image_link,
+                #     'image_data': '',
+                #     'score': score,
+                #     'rank': 0,
+                #     'created': 0,
+                #     'state': 0,
+                #     'create_time': int(time.time() * 1000),
+                #     'update_time': int(time.time() * 1000)
+                # }
                 # 上传nft_info表
                 # sql = f"""
                 # insert into
