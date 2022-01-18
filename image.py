@@ -236,11 +236,13 @@ for col in cols:
                 'nft_id': 0,
                 'group_id': element_group_id,
                 'name': x,
+                'type':'composite_element',
                 'owner': '',
                 'image_link': a.json()['result']['variants'][0],
                 'image_data': '',
                 'rank': 0,
                 'created': 0,
+                'score':y,
                 'create_time': int(time.time() * 1000),
                 'update_time': int(time.time() * 1000)
             }
@@ -293,9 +295,10 @@ rename_dict = {
 }
 kiko_cat_info_df = kiko_cat_info_df.rename(columns=rename_dict)
 kiko_cat_info_df = kiko_cat_info_df.replace(element_trans_dict)
-kiko_cat_info_df['occupation'] = 'None'
-kiko_cat_info_df['sex'] = 9
+
 composite_card_df = kiko_cat_info_df[rename_dict.values()]
+composite_card_df['occupation'] = 'None'
+composite_card_df['sex'] = 9
 
 done_name = []
 card_info_list = []
@@ -307,16 +310,18 @@ for name in info_df['name']:
             files=files,
             headers=headers
         )
-
+        score = kiko_cat_info_df[kiko_cat_info_df['custom_name'] == name]['score'].iloc[0]
         r = {
             'nft_id': 0,
             'group_id': card_group_id,
             'name': name,
+            'type':'composite_card',
             'owner': '',
             'image_link': a.json()['result']['variants'][0],
             'image_data': '',
             'rank': 0,
             'created': 0,
+            'score':score,
             'create_time': int(time.time() * 1000),
             'update_time': int(time.time() * 1000)
         }
@@ -334,7 +339,7 @@ from nft_info
 where group_id = {card_group_id}
 """
 element_info_id_df = mysql_con.get_data_from_mysql(sql)
-kiko_cat_info_df = pd.merge(kiko_cat_info_df, element_info_id_df, on='custom_name')
+composite_card_df = pd.merge(composite_card_df, element_info_id_df, on='custom_name')
 
-mysql_con.data_to_database(kiko_cat_info_df, 'nft_composite_card', index_type=False)
+mysql_con.data_to_database(composite_card_df, 'nft_composite_card', index_type=False)
 
