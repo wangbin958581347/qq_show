@@ -130,6 +130,7 @@ i = 0
 result_list = []
 kiko_cat_info_list = []
 chi_name_list = []
+element_num = {}
 while i < num:
     chi_name = ''
     en_name = ''
@@ -145,9 +146,20 @@ while i < num:
         final_info[element] = r
         chi_name += '_' + f'{class_info[element][r]["l2"][0]}({class_info[element][r]["l2"][1]})'
         en_name += '_' + f'{class_info[element][r]["l3"][0]}({class_info[element][r]["l3"][1]})'
+
+        if class_info[element][r]["l3"][1] in element_num:
+            element_num[class_info[element][r]["l3"][1]] += 1
+        else:
+            element_num[class_info[element][r]["l3"][1]] = 1
+
+        print( {
+                class_info[element][r]["l3"][0]: class_info[element][r]["l3"][1] + f" ## {element_num[class_info[element][r]['l3'][1]]}" ,
+            })
+
         kiko_cat_info.update(
             {
-                class_info[element][r]["l3"][0]: class_info[element][r]["l3"][1],
+                class_info[element][r]["l3"][0]:
+                    class_info[element][r]["l3"][1] + f" ## {element_num[class_info[element][r]['l3'][1]]}",
             }
         )
 
@@ -206,49 +218,54 @@ cols = [col for col in kiko_cat_info_df.columns if
         col not in ['info_id', 'create_time', 'update_time', 'type', 'name', 'group_id']]
 score_cols = []
 for element in cols:
-    element_df = kiko_cat_info_df[element]
-    element_score = len(element_df) / element_df.value_counts()
-
-    element_score = element_score.to_dict()
-    kiko_cat_info_df[f'{element}_score'] = element_df.replace(element_score)
+    element_df = kiko_cat_info_df[[element]]
+    element_df.loc[:,'name'] = [x.split(' ##')[0] for x in element_df[element]]
+    element_df.index = element_df.name
+    element_df.loc[:,'score'] = len(element_df) / element_df['name'].value_counts()
+    element_score = element_df[[element,'score']].set_index(element).to_dict()['score']
+    kiko_cat_info_df[f'{element}_score'] = kiko_cat_info_df[element].replace(element_score)
     score_cols.append(f'{element}_score')
 
 kiko_cat_info_df['score'] = kiko_cat_info_df[score_cols].sum(axis=1)
 
 # 先处理元素数据，将元素数据分别入表&上传至CDN上
 composite_element_list = []
-done_name = []
+done_name = {}
 element_info_list = []
 headers = {'Authorization': 'Bearer 5_crM9D0ZQEjTmJm6P_J9CjAgxU06AKt0ZB-xeAb'}
 for col in cols:
     piece = kiko_cat_info_df[[col, col + '_score']]
     piece = piece.drop_duplicates()
     for x, y in piece.values:
-        if x not in done_name:
-            files = {'file': open(f'./files/{card_group_id}/{col}/{x}.png', 'rb')}
+        png_name = x.split(' ##')[0]
+        if png_name not in done_name:
+            files = {'file': open(f'./files/{card_group_id}/{col}/{png_name}.png', 'rb')}
             a = requests.post(
                 "https://api.cloudflare.com/client/v4/accounts/06d48301c855502bf143d5a4c5d3a982/images/v1",
                 files=files,
                 headers=headers
             )
+            image_link =  a.json()['result']['variants'][0]
+            done_name[png_name] = image_link
+        else:
+            image_link = done_name[png_name]
 
-            r = {
-                'nft_id': 0,
-                'group_id': element_group_id,
-                'name': x,
-                'type':'composite_element',
-                'owner': '',
-                'image_link': a.json()['result']['variants'][0],
-                'image_data': '',
-                'rank': 0,
-                'created': 0,
-                'score':y,
-                'create_time': int(time.time() * 1000),
-                'update_time': int(time.time() * 1000)
-            }
-            print(r)
-            element_info_list.append(r)
-            done_name.append(x)
+        r = {
+            'nft_id': 0,
+            'group_id': element_group_id,
+            'name': x,
+            'type':'composite_element',
+            'owner': '',
+            'image_link':image_link,
+            'image_data': '',
+            'rank': 0,
+            'created': 0,
+            'score':y,
+            'create_time': int(time.time() * 1000),
+            'update_time': int(time.time() * 1000)
+        }
+        print(r)
+        element_info_list.append(r)
 
         composite_element = {
             'type': col,
@@ -286,7 +303,7 @@ rename_dict = {
     'Head': 'head_id',
     'Pants': 'pants_id',
     'Left Hand': 'left_hand_id',
-    'Righ tHand': 'right_hand_id',
+    'Right Hand': 'right_hand_id',
     'Shoes': 'shoes_id',
     'Tail': 'tail_id',
     'name': 'custom_name',
