@@ -290,7 +290,10 @@ where group_id = {element_group_id}
 """
 element_info_id_df = mysql_con.get_data_from_mysql(sql)
 composite_element_df = pd.merge(composite_element_df, element_info_id_df, on='property')
-mysql_con.data_to_database(composite_element_df, 'nft_composite_element', index_type=False)
+
+composite_element_df2 = composite_element_df.copy()
+composite_element_df2.loc[:,'property'] = [x.split(' ## ')[0] for x in composite_element_df2['property']]
+mysql_con.data_to_database(composite_element_df2, 'nft_composite_element', index_type=False)
 
 # 存合成的图片相关数据
 # 先去nft_composite_element 表中获取元素的id
