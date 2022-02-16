@@ -73,12 +73,24 @@ mysql_con = MysqlDb(host=hb_mysql.get('host'),
 
 data = pd.read_excel('./files/10012/kiko_cat_info_df-0214.xlsx')
 
-col = 'Clothes'
+col = 'Pants'
 card_group_id = 10012
 piece = data[[col, col + '_score']]
 piece = piece.drop_duplicates()
 done_name = []
 headers = {'Authorization': 'Bearer 5_crM9D0ZQEjTmJm6P_J9CjAgxU06AKt0ZB-xeAb'}
+
+sql = f"""
+select
+info_id
+from nft_composite_element
+where type = "{col}"
+"""
+data = mysql_con.get_data_from_mysql(sql)
+info_ids = set(data['info_id'].tolist())
+info_id_str = ','.join([str(x) for x in info_ids])
+
+
 
 for x,y in piece.values:
     if type(x) != float:
@@ -93,9 +105,10 @@ for x,y in piece.values:
             )
             img_link = a.json()['result']['variants'][0]
             sql = f'''
-                    update nft_info 
+                    update nft_info
                     set `image_link` = "{img_link}" 
                     where `name` like "%{png_name}%"
+                    and `id` in ({info_id_str})
                     '''
             mysql_con.commit_sql(sql)
             done_name.append(png_name)
