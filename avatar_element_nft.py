@@ -76,7 +76,7 @@ path = f'./files/{card_group_id}/'
 path1 = f'./img_result/{card_group_id}/'
 num = 198
 
-prefix = 'Avatar KIKO2'
+prefix = 'Avatar KIKO SE1'
 params_df = pd.read_excel(f'./files/{card_group_id}/限定套装-稀有值-0223.xlsx')
 
 classes = params_df['分类'].unique()
