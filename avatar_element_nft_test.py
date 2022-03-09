@@ -59,9 +59,9 @@ class MysqlDb(object):
         con.close()
 
 
-hb_mysql = {'host': '13.213.126.178',
+hb_mysql = {'host': '52.77.131.111',
             'user': 'admin',
-            'password': 'Z1P8q4moD9NjAZxC9CDc',
+            'password': 'OdeWzZNalcTPk2LAo0Lg',
             'database': 'ido_server',
             'port': 3306}
 
@@ -70,8 +70,8 @@ mysql_con = MysqlDb(host=hb_mysql.get('host'),
                     password=hb_mysql.get('password'),
                     database=hb_mysql.get('database'))
 
-card_group_id = 10012
-element_group_id = 10011
+card_group_id = 10017
+element_group_id = 10018
 path = f'./files/{card_group_id}/'
 path1 = f'./img_result/{card_group_id}/'
 num = 198
@@ -420,7 +420,7 @@ for name in info_df['name']:
         card_info_list.append(r)
         done_name.append(name)
 
-card_info_df = pd.DataFrame(card_iÅnfo_list)
+card_info_df = pd.DataFrame(card_info_list)
 mysql_con.data_to_database(card_info_df, 'nft_info', index_type=False)
 sql = f"""
 select
