@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from make.views import create_nft
+from make.views import create_nft,create_nft2
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('create_nft/', create_nft),
+    path('create_nftv2/', create_nft2),
 ]
