@@ -70,14 +70,14 @@ mysql_con = MysqlDb(host=hb_mysql.get('host'),
                     password=hb_mysql.get('password'),
                     database=hb_mysql.get('database'))
 
-card_group_id = 10012
-element_group_id = 10011
-path = f'./files/{card_group_id}/'
+card_group_id = 10015
+element_group_id = 10014
+path = f'./files/{element_group_id}/'
 path1 = f'./img_result/{card_group_id}/'
 num = 198
 
 prefix = 'Avatar KIKO SE1'
-params_df = pd.read_excel(f'./files/{card_group_id}/限定套装-稀有值-0223.xlsx')
+params_df = pd.read_excel(f'./files/{element_group_id}/限定套装-稀有值-0223.xlsx')
 
 classes = params_df['分类'].unique()
 class_info = {}
@@ -130,6 +130,9 @@ result_list = []
 kiko_cat_info_list = []
 chi_name_list = []
 element_num = {}
+
+
+
 while i < num:
     chi_name = ''
     en_name = ''
@@ -221,7 +224,8 @@ while i < num:
           ''')
     i += 1
 
-params_df2 = pd.read_excel(f'./files/{card_group_id}/限定套装-稀有值-0223.xlsx',sheet_name=1)
+
+params_df2 = pd.read_excel(f'./files/{element_group_id}/限定套装-稀有值-0223.xlsx',sheet_name=1)
 
 params_dict2 = params_df2.to_dict('record')
 
@@ -259,6 +263,7 @@ for params in params_dict2:
         result_list.append(result)
         j += 1
         i += 1
+
 
 
 
@@ -310,7 +315,7 @@ for col in cols:
         if type(x) != float:
             png_name = x.split(' ##')[0]
             if png_name not in done_name:
-                files = {'file': open(f'./files/{card_group_id}/{col}/{png_name}.png', 'rb')}
+                files = {'file': open(f'./files/{element_group_id}/{col}/{png_name}.png', 'rb')}
                 a = requests.post(
                     "https://api.cloudflare.com/client/v4/accounts/06d48301c855502bf143d5a4c5d3a982/images/v1",
                     files=files,
@@ -420,7 +425,7 @@ for name in info_df['name']:
         card_info_list.append(r)
         done_name.append(name)
 
-card_info_df = pd.DataFrame(card_iÅnfo_list)
+card_info_df = pd.DataFrame(card_info_list)
 mysql_con.data_to_database(card_info_df, 'nft_info', index_type=False)
 sql = f"""
 select
