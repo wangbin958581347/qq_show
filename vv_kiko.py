@@ -59,9 +59,9 @@ class MysqlDb(object):
         con.close()
 
 
-hb_mysql = {'host': '52.77.131.111',
+hb_mysql = {'host': '13.213.126.178',
             'user': 'admin',
-            'password': 'OdeWzZNalcTPk2LAo0Lg',
+            'password': 'Z1P8q4moD9NjAZxC9CDc',
             'database': 'ido_server',
             'port': 3306}
 
